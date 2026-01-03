@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Hero from "@/components/Hero";
 import axios from "axios";
 
 const page = () => {
@@ -56,7 +57,11 @@ const page = () => {
   //   </div>
   // );
 
-  return <div>hello</div>;
+  return (
+    <div>
+      <Hero></Hero>
+    </div>
+  );
 };
 
 export default page;

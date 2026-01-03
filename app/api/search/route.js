@@ -19,7 +19,9 @@ export async function GET(req) {
     //encodeURIComponent replaces them with encoded values.
     //hello world & JS ==> "hello%20world%20%26%20JS"
     const data = await axios.get(
-      `https://api.themoviedb.org/3/genre/movie/list`,
+      `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
+        query
+      )}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.TMDB_API_READ_ACCESS_TOKEN}`,
