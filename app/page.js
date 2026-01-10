@@ -6,11 +6,15 @@ import axios from "axios";
 const page = () => {
   // configDotenv();
   const [search, setsearch] = useState("");
+  const [queryResult, setQueryResult] = useState("");
 
   // Debouncing the Search Results to minimise the API CALLS to TMDB
   useEffect(() => {
     //to get rid of the empty call
-    if (search == "" || search.trim() == "") return;
+    if (search == "" || search.trim() == "") {
+      setQueryResult("");
+      return;
+    }
 
     const timerID = setTimeout(async () => {
       await GetSearchResult();
@@ -21,17 +25,16 @@ const page = () => {
     };
   }, [search]);
 
-  // Function to set the moive name equals to search result
-  function changeSearchName(movie) {
-    setsearch(movie);
-  }
-
   //To Fetch the Search Results on query by User
   async function GetSearchResult() {
     try {
       const data = await axios.get(`/api/search?query=${search}`);
+      setQueryResult(data.data);
       console.log("Data:");
-      console.log(data);
+      console.log(data.data);
+      console.log(data.data.result.results[4]);
+      console.log(data.data.result.results[3]);
+      console.log(data.data.result.results[5]);
     } catch (err) {
       console.log(err);
     }
@@ -59,7 +62,11 @@ const page = () => {
 
   return (
     <div>
-      <Hero></Hero>
+      <Hero
+        searchItem={search}
+        setSearchItem={setsearch}
+        data={queryResult}
+      ></Hero>
     </div>
   );
 };

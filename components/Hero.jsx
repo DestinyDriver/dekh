@@ -4,17 +4,20 @@ import Image from "next/image";
 import localFont from "next/font/local";
 import gsap from "gsap";
 import { ArrowRight } from "iconoir-react";
-// import { useGSAP } from "@gsap/react";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRouter } from "next/navigation";
+import { notFound } from "next/navigation";
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+// gsap.registerPlugin(useGSAP);
 const amaticaSC = localFont({
   src: "../public/fonts/AmaticaSC/AmaticaSC-Regular.ttf",
   display: "swap",
 });
 
-const Hero = () => {
+const Hero = ({ searchItem, setSearchItem, data }) => {
   const [isPause, setisPause] = useState(false);
   const [logoRotation, setlogoRotation] = useState(360);
   const containerSelection = useRef(null);
@@ -22,7 +25,18 @@ const Hero = () => {
   const textSelection = useRef(null);
   const logoTween = useRef(null);
 
+  const router = useRouter();
+
   useGSAP(() => {
+    gsap.set(".search-box", {
+      opacity: 0,
+      xPercent: -50,
+      yPercent: -50,
+      left: "50%",
+      top: "50%",
+      position: "fixed",
+    });
+
     gsap.to(".hero-img", {
       y: -20,
       repeat: -1,
@@ -37,6 +51,56 @@ const Hero = () => {
       repeat: -1,
       duration: 12,
       ease: "linear",
+    });
+
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".clip",
+        start: "center center",
+        end: "+=600",
+        scrub: 1,
+        pin: true,
+        pinSpacing: true,
+      },
+    });
+
+    // timeline.addLabel("second", "+=0.4");
+
+    timeline.fromTo(
+      ".section2-img-mask",
+      {
+        clipPath: "polygon(20% 0%, 71% 22%, 89% 100%, 18% 73%)",
+      },
+      {
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+        width: "100vw",
+        height: "100vh",
+        ease: "none",
+      },
+      "first"
+    );
+
+    timeline.to(
+      "#clip-image",
+      {
+        height: "100vh",
+        width: "100vw",
+      },
+      "first"
+    );
+
+    timeline.to(".search-box", {
+      opacity: "100%",
+    });
+
+    const timeline2 = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".about-section",
+        start: "bottom center",
+        end: "top center",
+        markers: true,
+        pin: true,
+      },
     });
   }, []);
 
@@ -168,12 +232,108 @@ const Hero = () => {
       </div>
 
       {/*Section-2*/}
-      <div className="min-h-screen w-full border-1 bg-[var(--background-color)] flex justify-center items-center">
-        <div className="h-[95vh] rounded-2xl w-[90%]  bg-[var(--helper-color2)]"></div>
+      <div className="relative min-h-screen w-full ">
+        {/* Search Box */}
+        <div className="opacity-0  search-box   flex justify-center items-center flex-col absolute z-10 gap-10 ">
+          <div
+            className={`text-[var(--helper-color1)] ${amaticaSC.className} font-extrabold text-8xl text-shadow-md`}
+          >
+            Search. Watch. Repeat.
+          </div>
+          <input
+            className="border-2 border-[var(--helper-color1)] h-[40px] w-[55vw] rounded-l-full rounded-r-full bg-[var(--helper-color1)]/20 text-[var(--background-color)] text-center px-4 py-2 outline-none
+    focus:ring-1
+    focus:ring-[var(--primary-color)]
+    focus:border-[var(--primary-color)] "
+            type="text"
+            onChange={(e) => {
+              setSearchItem(e.target.value);
+            }}
+          ></input>
+          {data?.result?.results?.length > 0 && (
+            <div>
+              {data.result.results.slice(0, 5).map((el, ind) => {
+                return (
+                  <div
+                    key={el.id}
+                    className="h-[60px] w-[55vw] bg-[var(--background-color)] rounded-md flex justify-between items-center mt-1 hover:bg-amber-300"
+                    onClick={() => {
+                      const title =
+                        el.media_type === "movie" ? el.title : el.name;
+                      const slug = encodeURIComponent(
+                        title
+                          .toLowerCase()
+                          .replace(/[^a-z0-9\s-]/g, "") // remove : , . ! etc
+                          .trim()
+                          .replace(/\s+/g, "-")
+                      );
+
+                      if (el.media_type === "tv") {
+                        router.push(`/watch/tv/${slug}?ep=${el.id}`);
+                      } else if (el.media_type === "movie") {
+                        router.push(`/watch/movie/${slug}?ep=${el.id}`);
+                      } else {
+                        notFound();
+                      }
+                    }}
+                  >
+                    <div className="size-[50px] bg-green-400 ml-3 rounded-sm ">
+                      <img
+                        src={`https://image.tmdb.org/t/p/w500${el.poster_path}`}
+                        alt="poster"
+                      />
+                    </div>
+                    <div className="flex flex-col justify-center items-center list-none ">
+                      <div>
+                        {el.media_type === "movie" ? el.title : el.name}
+                      </div>
+                      <div className="flex justify-end items-center gap-2 bg-green-500">
+                        {el.adult && <li>18+</li>}
+                        <li>
+                          {el.media_type === "movie"
+                            ? "movie"
+                            : el.media_type === "tv"
+                            ? "series"
+                            : null}
+                        </li>
+                        <li>{Math.round(el.vote_average * 10) / 10}</li>
+                        <li>
+                          {el.media_type === "movie"
+                            ? el.release_date.slice(0, 4)
+                            : el.media_type === "tv"
+                            ? el.first_air_date.slice(0, 4)
+                            : null}
+                        </li>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="min-h-screen w-full  bg-[var(--background-color)] flex justify-center items-center relative">
+          {/* background img */}
+          <div className="h-dvh w-screen  flex justify-center items-center clip">
+            <div className="clip-img section2-img-mask  size-64 ">
+              <img
+                src="/img/back.png"
+                alt=""
+                className={`  object-cover size-[200%]`}
+                id="clip-image"
+              />
+            </div>
+          </div>
+        </div>
       </div>
       {/* section-3 */}
-      <div className="min-h-screen w-full border-1 bg-[var(--background-color)] relative flex justify-center items-center">
-        {/* <div className="h-[70%] w-[90%] absolute -top-1 bg-[var(--helper-color2)]"></div> */}
+      <div className="h-screen w-full  bg-[var(--background-color)] relative flex justify-center items-center">
+        <div className=" h-[100vh] w-full  about-section">hii</div>
+      </div>
+      {/* section 4 */}
+      <div className="h-screen w-full  bg-[var(--helper-color1)] relative flex justify-center items-center">
+        <div className="h-screen w-full about-section"></div>
       </div>
     </div>
   );
