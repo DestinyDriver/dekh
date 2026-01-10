@@ -6,7 +6,7 @@ export async function GET(req) {
   const id = url.searchParams.get("id");
   const page = url.searchParams.get("page") ?? 1;
 
-  if (!id || id.trim() == "") {
+  if (!id || id.trim() === "") {
     return NextResponse.json({ result: [] });
   }
 
@@ -15,27 +15,32 @@ export async function GET(req) {
     "Content-Type": "application/json",
   };
 
+  let details, recommendations, credits;
+
   try {
-    const [details, recommendations, credits] = await Promise.all([
-      axios.get(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, {
-        headers,
-      }),
-      await axios.get(
-        `https://api.themoviedb.org/3/movie/${id}/recommendations?language=en-US&page=${page}`,
-        { headers }
+    const axiosInstance = axios.create({
+      timeout: 10000, // 10s
+      headers,
+    });
+
+    [details, recommendations, credits] = await Promise.all([
+      axiosInstance.get(
+        `https://api.themoviedb.org/3/movie/${id}?language=en-US`
       ),
-      axios.get(
-        `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
-        {
-          headers,
-        }
+      axiosInstance.get(
+        `https://api.themoviedb.org/3/movie/${id}/recommendations?language=en-US&page=${page}`
+      ),
+      axiosInstance.get(
+        `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`
       ),
     ]);
   } catch (err) {
-    return NextResponse(
+    console.log("error");
+
+    console.log(err);
+    return NextResponse.json(
       {
         err: "API Fetch Failed",
-        error_msg: err,
       },
       { status: 500 }
     );
@@ -43,13 +48,13 @@ export async function GET(req) {
 
   const dat = {
     result: {
-      details: details.data,
-      recommendations: recommendations.data,
-      credits: credits.data,
+      details: details.data[0],
+      recommendations: recommendations.data[0],
+      credits: credits.data[0],
     },
   };
 
-  console.log(dat);
+  console.log(dat.result);
 
   return NextResponse.json({
     result: {
