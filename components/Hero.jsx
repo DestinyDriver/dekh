@@ -288,7 +288,7 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
                         {el.media_type === "movie" ? el.title : el.name}
                       </div>
                       <div className="flex justify-end items-center gap-2 bg-green-500">
-                        {el.adult && <li>18+</li>}
+                        {el.adult === true && <li>18+</li>}
                         <li>
                           {el.media_type === "movie"
                             ? "movie"

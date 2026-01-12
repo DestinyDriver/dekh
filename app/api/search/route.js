@@ -7,18 +7,14 @@ export async function GET(req) {
   //to get the value of the search params query
   const query = url.searchParams.get(`query`);
   const include_adult = url.searchParams.get("include_adult") ?? "false";
-  const page = url.searchParams.get("page") ?? 1;
+  const page = url.searchParams.get("page") ?? "1";
 
   //to prevent edge case
   if (!query || query.trim() == "") {
     return NextResponse.json({ result: [] });
   }
 
-  const fetchData = async () => {
-    //must encode the string to uri  i.e
-    //URLs break if they contain spaces, &, =, ?, etc.
-    //encodeURIComponent replaces them with encoded values.
-    //hello world & JS ==> "hello%20world%20%26%20JS"
+  try {
     const data = await axios.get(
       `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(
         query
@@ -31,9 +27,12 @@ export async function GET(req) {
       }
     );
 
-    return data.data;
-  };
-
-  const result = await fetchData();
-  return NextResponse.json({ result: result });
+    const result = data.data;
+    return NextResponse.json({ result: result });
+  } catch (err) {
+    return NextResponse.json(
+      { err: "API Fetch Error", err_msg: err },
+      { status: 500 }
+    );
+  }
 }

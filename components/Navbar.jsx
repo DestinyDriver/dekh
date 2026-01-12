@@ -63,7 +63,7 @@ const Navbar = () => {
 
   return (
     <div
-      className={`mt-6 h-[40px]  w-[80%] border-[var(--helper-color2)] rounded-2xl flex justify-between items-center ${amaticaSC.className}  font-bold cursor-pointer`}
+      className={`h-[80%]  w-[80%] border-[var(--helper-color2)] rounded-2xl flex justify-between items-center ${amaticaSC.className}  font-bold cursor-pointer`}
     >
       {/* logo - moving */}
       <div
