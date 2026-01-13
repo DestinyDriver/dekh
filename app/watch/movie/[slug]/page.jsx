@@ -279,9 +279,9 @@ const page = () => {
     }
   }
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [id]);
+  useEffect(() => {
+    fetchData();
+  }, [id]);
 
   return (
     <div>
@@ -379,19 +379,19 @@ const page = () => {
               <iframe
                 className="h-full rounded-tr-xl w-full"
                 allowFullScreen={true}
-                // src={`https://www.2embed.cc/embed/${id}`}
+                src={`https://www.2embed.cc/embed/${id}`}
                 frameborder="0"
               ></iframe>
             </div>
             {/* controls */}
             <div className=" rounded-br-xl grid grid-rows grid-rows-[1fr_1fr_2fr] text-[var(--background-color)] font-bold text-sm ">
-              <div className="flex justify-start items-center pr-4">
-                <div className="w-[80px]">Overview:</div>
+              <div className="flex justify-start items-center pr-4 border-b-1">
+                <div className="w-[80px] ">Overview:</div>
                 <div className="w-full line-clamp-2 break-word">
                   {data.result.details.overview}
                 </div>
               </div>
-              <div className="flex justify-start items-center">
+              <div className="flex justify-start items-center border-b-1">
                 <div className="w-[80px]">Genere:</div>
                 <div className="flex justify-start items-center gap-2 w-full">
                   {data.result.details.genres.map((el, i) => {
