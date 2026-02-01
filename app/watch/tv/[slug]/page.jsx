@@ -184,11 +184,13 @@ const TvWatchPage = () => {
                           }
                           className="w-full appearance-none px-3 pr-10 py-2 rounded-lg bg-black/40 border border-white/10 text-sm font-bold outline-none"
                         >
-                          {details.seasons?.map((s) => (
-                            <option key={s.id} value={s.season_number}>
-                              Season {s.season_number}
-                            </option>
-                          ))}
+                          {details.seasons
+                            ?.filter((s) => s.season_number >= 1)
+                            .map((s) => (
+                              <option key={s.id} value={s.season_number}>
+                                Season {s.season_number}
+                              </option>
+                            ))}
                         </select>
 
                         {/* ✅ Your Icon */}

@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import Image from "next/image";
 import localFont from "next/font/local";
 import gsap from "gsap";
-import { ArrowRight } from "iconoir-react";
+import { ArrowRight, Search } from "iconoir-react";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRouter } from "next/navigation";
@@ -77,7 +77,7 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
         height: "100vh",
         ease: "none",
       },
-      "first"
+      "first",
     );
 
     timeline.to(
@@ -86,7 +86,7 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
         height: "100vh",
         width: "100vw",
       },
-      "first"
+      "first",
     );
 
     timeline.to(".search-box", {
@@ -125,7 +125,7 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
           duration: 0.4,
           ease: "power3.out",
         },
-        "<"
+        "<",
       );
 
     container.addEventListener("mouseenter", () => hoverTl.play());
@@ -234,83 +234,113 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
       {/*Section-2*/}
       <div className="relative min-h-screen w-full ">
         {/* Search Box */}
-        <div className="opacity-0  search-box   flex justify-center items-center flex-col absolute z-10 gap-10 ">
+        <div className="opacity-0 search-box flex justify-center items-center flex-col fixed z-50 gap-6 w-[92vw] sm:w-[70vw] md:w-[55vw] max-w-[720px]">
           <div
-            className={`text-[var(--helper-color1)] ${amaticaSC.className} font-extrabold text-8xl text-shadow-md`}
+            className={`text-[var(--helper-color1)] ${amaticaSC.className} font-extrabold text-5xl sm:text-7xl text-center drop-shadow-md`}
           >
             Search. Watch. Repeat.
           </div>
-          <input
-            className="border-2 border-[var(--helper-color1)] h-[40px] w-[55vw] rounded-l-full rounded-r-full bg-[var(--helper-color1)]/20 text-[var(--background-color)] text-center px-4 py-2 outline-none
-    focus:ring-1
-    focus:ring-[var(--primary-color)]
-    focus:border-[var(--primary-color)] "
-            type="text"
-            onChange={(e) => {
-              setSearchItem(e.target.value);
-            }}
-          ></input>
-          {data?.result?.results?.length > 0 && (
-            <div>
-              {data.result.results.slice(0, 5).map((el, ind) => {
-                return (
-                  <div
-                    key={el.id}
-                    className="h-[60px] w-[55vw] bg-[var(--background-color)] rounded-md flex justify-between items-center mt-1 hover:bg-amber-300"
-                    onClick={() => {
-                      const title =
-                        el.media_type === "movie" ? el.title : el.name;
-                      const slug = encodeURIComponent(
-                        title
-                          .toLowerCase()
-                          .replace(/[^a-z0-9\s-]/g, "") // remove : , . ! etc
-                          .trim()
-                          .replace(/\s+/g, "-")
-                      );
 
-                      if (el.media_type === "tv") {
-                        router.push(`/watch/tv/${slug}?ep=${el.id}`);
-                      } else if (el.media_type === "movie") {
-                        router.push(`/watch/movie/${slug}?ep=${el.id}`);
-                      } else {
-                        notFound();
-                      }
-                    }}
-                  >
-                    <div className="size-[50px] bg-green-400 ml-3 rounded-sm ">
-                      <img
-                        src={`https://image.tmdb.org/t/p/w500${el.poster_path}`}
-                        alt="poster"
-                      />
-                    </div>
-                    <div className="flex flex-col justify-center items-center list-none ">
-                      <div>
-                        {el.media_type === "movie" ? el.title : el.name}
-                      </div>
-                      <div className="flex justify-end items-center gap-2 bg-green-500">
-                        {el.adult === true && <li>18+</li>}
-                        <li>
-                          {el.media_type === "movie"
-                            ? "movie"
-                            : el.media_type === "tv"
-                            ? "series"
-                            : null}
-                        </li>
-                        <li>{Math.round(el.vote_average * 10) / 10}</li>
-                        <li>
-                          {el.media_type === "movie"
-                            ? el.release_date.slice(0, 4)
-                            : el.media_type === "tv"
-                            ? el.first_air_date.slice(0, 4)
-                            : null}
-                        </li>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+          {/* ✅ Search Bar */}
+          <div className="w-full relative">
+            <div className="flex items-center gap-2 bg-[var(--helper-color1)]/15 backdrop-blur-xl border border-white/10 rounded-full px-4 py-3 shadow-[0_0_40px_rgba(0,0,0,0.35)] focus-within:border-[var(--primary-color)] focus-within:shadow-[0_0_55px_rgba(0,173,181,0.4)] transition">
+              <Search className="size-5 text-white/70" />
+
+              <input
+                value={searchItem}
+                onChange={(e) => setSearchItem(e.target.value)}
+                className="w-full bg-transparent outline-none text-white font-semibold placeholder:text-white/40 text-sm sm:text-base"
+                placeholder="Search movies, anime, webseries..."
+              />
+
+              {searchItem?.length > 0 && (
+                <button
+                  onClick={() => setSearchItem("")}
+                  className="text-white/60 hover:text-white text-sm px-2"
+                >
+                  ✕
+                </button>
+              )}
             </div>
-          )}
+
+            {/* ✅ Search Suggestions Dropdown */}
+            {data?.result?.results?.length > 0 &&
+              searchItem.trim().length > 0 && (
+                <div className="mt-3 w-full rounded-2xl overflow-hidden border border-white/10 bg-black/55 backdrop-blur-xl shadow-[0_0_45px_rgba(0,0,0,0.5)] suggestion-box">
+                  {data.result.results.slice(0, 6).map((el) => {
+                    const title =
+                      el.media_type === "movie" ? el.title : el.name;
+                    const year =
+                      el.media_type === "movie"
+                        ? el.release_date?.slice(0, 4)
+                        : el.first_air_date?.slice(0, 4);
+
+                    const rating = Math.round((el.vote_average || 0) * 10) / 10;
+
+                    return (
+                      <button
+                        key={el.id}
+                        className="w-full flex items-center gap-3 px-4 py-3 border-b border-white/10 hover:bg-white/5 transition text-left group suggestion-item"
+                        onClick={() => {
+                          const slug = encodeURIComponent(
+                            (title || "")
+                              .toLowerCase()
+                              .replace(/[^a-z0-9\s-]/g, "")
+                              .trim()
+                              .replace(/\s+/g, "-"),
+                          );
+
+                          if (el.media_type === "tv") {
+                            router.push(`/watch/tv/${slug}?ep=${el.id}`);
+                          } else if (el.media_type === "movie") {
+                            router.push(`/watch/movie/${slug}?ep=${el.id}`);
+                          } else {
+                            notFound();
+                          }
+                        }}
+                      >
+                        {/* Poster */}
+                        <div className="h-[52px] w-[38px] rounded-lg overflow-hidden bg-white/5 border border-white/10 flex-shrink-0">
+                          {el.poster_path ? (
+                            <img
+                              src={`https://image.tmdb.org/t/p/w185${el.poster_path}`}
+                              alt={title}
+                              className="h-full w-full object-cover group-hover:scale-[1.05] transition"
+                            />
+                          ) : (
+                            <div className="h-full w-full flex items-center justify-center text-white/40 text-[10px]">
+                              N/A
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Text */}
+                        <div className="flex-1 min-w-0">
+                          <div className="text-white font-bold text-sm sm:text-base line-clamp-1">
+                            {title}
+                          </div>
+
+                          <div className="flex items-center gap-2 text-xs text-white/60 mt-[2px]">
+                            <span className="uppercase">
+                              {el.media_type === "movie" ? "Movie" : "Series"}
+                            </span>
+                            <span>•</span>
+                            <span>⭐ {rating}</span>
+                            <span>•</span>
+                            <span>{year || "----"}</span>
+                          </div>
+                        </div>
+
+                        {/* Watch badge */}
+                        <span className="text-[10px] px-2 py-1 rounded-full bg-[var(--primary-color)] text-black font-extrabold">
+                          WATCH
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+          </div>
         </div>
 
         <div className="min-h-screen w-full  bg-[var(--background-color)] flex justify-center items-center relative">
