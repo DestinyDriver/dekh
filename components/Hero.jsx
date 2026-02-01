@@ -109,7 +109,7 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
   return (
     <div className="bg-[var(--background-color)] flex flex-col items-center  ">
       {/* Hero Section */}
-      <div className="min-h-screen w-full  flex flex-col justify-start items-center relative ">
+      <div className="min-h-screen w-full   flex flex-col justify-start items-center relative ">
         {/* Nav-bar */}
         <Navbar />
         {/* Hero Poster */}
