@@ -9,7 +9,6 @@ export async function GET(req) {
   const include_adult = url.searchParams.get("include_adult") ?? "false";
   const page = url.searchParams.get("page") ?? "1";
 
-  //to prevent edge case
   if (!query || query.trim() == "") {
     return NextResponse.json({ result: [] });
   }
@@ -17,14 +16,14 @@ export async function GET(req) {
   try {
     const data = await axios.get(
       `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(
-        query
+        query,
       )}&include_adult=${include_adult}&page=${page}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.TMDB_API_READ_ACCESS_TOKEN}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     const result = data.data;
@@ -32,7 +31,7 @@ export async function GET(req) {
   } catch (err) {
     return NextResponse.json(
       { err: "API Fetch Error", err_msg: err },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

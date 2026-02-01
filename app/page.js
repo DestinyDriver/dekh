@@ -25,40 +25,14 @@ const page = () => {
     };
   }, [search]);
 
-  //To Fetch the Search Results on query by User
   async function GetSearchResult() {
     try {
       const data = await axios.get(`/api/search?query=${search}`);
       setQueryResult(data.data);
-      console.log("Data:");
-      console.log(data.data);
-      console.log(data.data.result.results[4]);
-      console.log(data.data.result.results[3]);
-      console.log(data.data.result.results[5]);
     } catch (err) {
       console.log(err);
     }
   }
-
-  // function
-
-  // return (
-  //   <div className="flex justify-center items-center h-[100vh] bg-green-400">
-  //     <input
-  //       className="center h-20 w-40 bg-gray-600 pl-1 text-center"
-  //       onChange={(e) => {
-  //         changeSearchName(e.target.value);
-  //       }}
-  //     ></input>
-  //     <br></br>
-  //     <br></br>
-  //     <iframe
-  //       src="https://www.2embed.cc/embed/1593311"
-  //       height={500}
-  //       width={500}
-  //     ></iframe>
-  //   </div>
-  // );
 
   return (
     <div>
