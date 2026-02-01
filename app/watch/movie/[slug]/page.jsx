@@ -12,6 +12,8 @@ import {
   DirectorChair,
   Search,
   User,
+  FastArrowRight,
+  Play,
 } from "iconoir-react";
 
 const Page = () => {
@@ -22,6 +24,11 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
 
   const id = searchParams.get("ep");
+
+  const recommendations = useMemo(
+    () => data?.result?.recommendations?.results || [],
+    [data],
+  );
 
   async function fetchData() {
     if (!id || id.trim() === "") {
@@ -259,6 +266,109 @@ const Page = () => {
               </div>
             </div>
             {/* END RIGHT */}
+          </div>
+        </div>
+      </div>
+
+      {/* Recommendations */}
+      <div className="w-full flex justify-center items-start px-2 sm:px-4 pb-8">
+        <div className="w-full max-w-[1400px] rounded-2xl bg-[var(--helper-color2)] shadow-[0_0_60px_rgba(0,0,0,0.35)] overflow-hidden no-scrollbar">
+          {/* Header */}
+          <div className="p-4 md:p-5 border-b border-[var(--helper-color1)]">
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-[var(--background-color)]">
+                <h2 className="text-base sm:text-lg font-extrabold">
+                  Recommended Movies
+                </h2>
+                <p className="text-xs sm:text-sm text-white/60 mt-1">
+                  Similar movies based on what you're watching
+                </p>
+              </div>
+
+              <div className="hidden sm:flex items-center gap-2 text-xs font-bold text-white/60">
+                <span className="px-3 py-1 rounded-full bg-black/40 border border-white/10 flex justify-center items-center gap-1">
+                  Scroll To See More <FastArrowRight className="size-4" />
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* List */}
+          <div className="p-4 md:p-5">
+            {recommendations.length === 0 ? (
+              <div className="text-white/60 text-sm">
+                No recommendations available right now.
+              </div>
+            ) : (
+              <div className="flex gap-4 overflow-x-auto pb-2">
+                {recommendations.slice(0, 18).map((movie) => {
+                  const posterUrl = movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
+                    : "";
+
+                  return (
+                    <button
+                      key={movie.id}
+                      onClick={() => {
+                        const slug = encodeURIComponent(
+                          (movie.title || "")
+                            .toLowerCase()
+                            .replace(/[^a-z0-9\s-]/g, "")
+                            .trim()
+                            .replace(/\s+/g, "-"),
+                        );
+
+                        router.push(`/watch/movie/${slug}?ep=${movie.id}`);
+                      }}
+                      className="group min-w-[140px] sm:min-w-[160px] md:min-w-[180px] text-left rounded-2xl overflow-hidden border border-white/10 bg-black/40 transition focus:outline-none focus:ring-2 "
+                    >
+                      {/* Poster */}
+
+                      <div className="relative ">
+                        {/* overlay */}
+                        <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition duration-300 bg-black/45 z-10" />
+
+                        {/* Play Icon Center */}
+                        <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition duration-300">
+                          <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full  text-white flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.6)] scale-90 group-hover:scale-100 transition-transform duration-300">
+                            <Play className="size-6 sm:size-7" />
+                          </div>
+                        </div>
+
+                        {/* Image */}
+                        <div className="h-[210px] sm:h-[240px] md:h-[260px] bg-black overflow-hidden ">
+                          {posterUrl ? (
+                            <img
+                              src={posterUrl}
+                              alt={movie.title}
+                              loading="lazy"
+                              className="h-full w-full object-cover  object-top transition duration-300 group-hover:scale-[1.06] group-hover:grayscale-100"
+                            />
+                          ) : (
+                            <div className="h-full w-full flex items-center justify-center text-xs text-white/50">
+                              No Poster
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Text */}
+                      <div className="p-3">
+                        <p className="text-[12px] sm:text-[13px] font-extrabold text-[var(--background-color)] line-clamp-2 leading-snug text-center">
+                          {movie.title}
+                        </p>
+
+                        <div className="mt-2 flex items-center justify-between gap-2 flex justify-center">
+                          <p className="text-[11px] text-white/60 font-semibold text-center">
+                            {movie.release_date?.slice(0, 4) || "----"}
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
