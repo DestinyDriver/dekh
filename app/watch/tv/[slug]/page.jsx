@@ -13,6 +13,7 @@ import {
   FastArrowRight,
   Play,
 } from "iconoir-react";
+import styles from "@/components/Scrollbar.module.css";
 
 const TvWatchPage = () => {
   const searchParams = useSearchParams();
@@ -222,7 +223,9 @@ const TvWatchPage = () => {
                 </div>
 
                 {/* Episode List */}
-                <div className="mt-4 max-h-[240px] sm:max-h-[320px] lg:max-h-[515px] episode-scroll overflow-y-auto rounded-xl border border-white/10 bg-black/40">
+                <div
+                  className={`mt-4 max-h-[240px] sm:max-h-[320px] lg:max-h-[515px] episode-scroll overflow-y-auto rounded-xl border border-white/10 bg-black/40 ${styles.scrollBox}`}
+                >
                   {filteredEpisodes.length === 0 ? (
                     <div className="p-4 text-white/60 text-sm">
                       No episodes found.
@@ -345,7 +348,7 @@ const TvWatchPage = () => {
       {/* Reccomanedation */}
       {/* Recommendations */}
       <div className="w-full flex justify-center items-start px-2 sm:px-4 pb-8">
-        <div className="w-full max-w-[1400px] rounded-2xl bg-[var(--helper-color2)] shadow-[0_0_60px_rgba(0,0,0,0.35)] overflow-hidden no-scrollbar">
+        <div className="w-full max-w-[1400px] rounded-2xl bg-[var(--helper-color2)] shadow-[0_0_60px_rgba(0,0,0,0.35)] overflow-hidden ">
           {/* Header */}
           <div className="p-4 md:p-5 border-b border-[var(--helper-color1)]">
             <div className="flex items-center justify-between gap-4">
@@ -374,7 +377,9 @@ const TvWatchPage = () => {
                 No recommendations available right now.
               </div>
             ) : (
-              <div className="flex gap-4 overflow-x-auto pb-2">
+              <div
+                className={`flex gap-4 overflow-x-auto pb-2 ${styles.noScrollbar}`}
+              >
                 {recommendations.slice(0, 18).map((show) => {
                   const posterUrl = show.poster_path
                     ? `https://image.tmdb.org/t/p/w342${show.poster_path}`

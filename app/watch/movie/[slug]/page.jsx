@@ -15,6 +15,7 @@ import {
   FastArrowRight,
   Play,
 } from "iconoir-react";
+import styles from "@/components/Scrollbar.module.css";
 
 const Page = () => {
   const searchParams = useSearchParams();
@@ -176,7 +177,9 @@ const Page = () => {
                 </div>
 
                 {/* Episode List ✅ responsive height */}
-                <div className="mt-4 max-h-[220px] sm:max-h-[280px] lg:max-h-[360px] overflow-y-auto rounded-xl border border-white/10 bg-black/40">
+                <div
+                  className={`mt-4 max-h-[220px] sm:max-h-[280px] lg:max-h-[360px] overflow-y-auto rounded-xl border border-white/10 bg-black/40 ${styles.scrollBox}`}
+                >
                   <button className="w-full text-left px-4 py-3 border-b border-white/10 hover:bg-white/5 transition">
                     <div className="flex items-center justify-between">
                       <span className="text-[var(--background-color)] font-bold">
@@ -236,7 +239,7 @@ const Page = () => {
                     Top Cast
                   </div>
 
-                  <div className="flex gap-4 overflow-x-auto pb-1">
+                  <div className="flex gap-4 overflow-x-auto pb-1 ">
                     {credits?.cast?.slice(0, 5)?.map((el, i) => (
                       <div
                         key={i}
@@ -300,7 +303,9 @@ const Page = () => {
                 No recommendations available right now.
               </div>
             ) : (
-              <div className="flex gap-4 overflow-x-auto pb-2">
+              <div
+                className={`flex gap-4 overflow-x-auto pb-2 ${styles.noScrollbar}`}
+              >
                 {recommendations.slice(0, 18).map((movie) => {
                   const posterUrl = movie.poster_path
                     ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`

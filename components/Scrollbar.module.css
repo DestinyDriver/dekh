@@ -1,0 +1,63 @@
+.scrollBox {
+  /* Firefox */
+  scrollbar-width: thin;
+  border-radius: 16px;
+  overflow: auto;
+  scrollbar-color: color-mix(in srgb, var(--background-color) 70%, transparent)
+    rgba(255, 255, 255, 0.06);
+}
+
+/* Chrome / Edge / Brave */
+.scrollBox::-webkit-scrollbar {
+  width: 10px; /* vertical */
+  height: 10px; /* horizontal */
+}
+
+.scrollBox::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.scrollBox::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+
+  /* ✅ Theme gradient look */
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--background-color) 95%, transparent),
+    color-mix(in srgb, var(--background-color) 55%, transparent)
+  );
+
+  /* ✅ Glow effect */
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--background-color) 60%, transparent),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+
+  border: 2px solid rgba(0, 0, 0, 0.45);
+}
+
+.scrollBox::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--background-color) 100%, transparent),
+    color-mix(in srgb, var(--background-color) 70%, transparent)
+  );
+
+  box-shadow:
+    0 0 16px color-mix(in srgb, var(--background-color) 85%, transparent),
+    0 0 30px color-mix(in srgb, var(--background-color) 45%, transparent);
+}
+
+.scrollBox::-webkit-scrollbar-thumb:active {
+  background: color-mix(in srgb, var(--background-color) 90%, black);
+}
+
+.noScrollbar {
+  -ms-overflow-style: none; /* IE + Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.noScrollbar::-webkit-scrollbar {
+  display: none; /* Chrome / Safari */
+}
