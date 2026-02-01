@@ -211,7 +211,7 @@ const TvWatchPage = () => {
                 </div>
 
                 {/* Episode List */}
-                <div className="mt-4 max-h-[240px] sm:max-h-[320px] lg:max-h-[380px] overflow-y-auto rounded-xl border border-white/10 bg-black/40">
+                <div className="mt-4 max-h-[240px] sm:max-h-[320px] lg:max-h-[515px] episode-scroll overflow-y-auto rounded-xl border border-white/10 bg-black/40">
                   {filteredEpisodes.length === 0 ? (
                     <div className="p-4 text-white/60 text-sm">
                       No episodes found.
