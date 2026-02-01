@@ -11,6 +11,7 @@ import {
   NavArrowDownSolid,
   DirectorChair,
   Search,
+  User,
 } from "iconoir-react";
 
 const Page = () => {
@@ -229,7 +230,7 @@ const Page = () => {
                   </div>
 
                   <div className="flex gap-4 overflow-x-auto pb-1">
-                    {credits?.cast?.slice(0, 8)?.map((el, i) => (
+                    {credits?.cast?.slice(0, 5)?.map((el, i) => (
                       <div
                         key={i}
                         className="min-w-[80px] sm:min-w-[86px] flex flex-col items-center gap-2"
@@ -243,7 +244,7 @@ const Page = () => {
                             />
                           ) : (
                             <div className="h-full w-full flex items-center justify-center text-[10px] text-white/60">
-                              N/A
+                              <User className="size-4"></User>
                             </div>
                           )}
                         </div>
