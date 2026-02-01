@@ -75,7 +75,7 @@ const TvWatchPage = () => {
   if (loading || !details) {
     return (
       <div className="min-h-screen bg-[var(--background-color)]">
-        <div className="w-full h-[10vh] flex justify-center items-center">
+        <div className="w-full h-[10vh] flex justify-center items-center -mt-4">
           <Navbar />
         </div>
 
@@ -103,7 +103,7 @@ const TvWatchPage = () => {
   return (
     <div className="min-h-screen bg-[var(--background-color)]">
       {/* Navbar */}
-      <div className="w-full h-[10vh] flex justify-center items-center bg-[var(--background-color)]">
+      <div className="w-full h-[10vh] flex justify-center items-center bg-[var(--background-color)] -mt-4">
         <Navbar />
       </div>
 
