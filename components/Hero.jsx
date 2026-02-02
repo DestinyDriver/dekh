@@ -9,6 +9,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
+import WarningMarquee from "./WarningMarquee";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -262,6 +263,7 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
 
       {/*Section-2*/}
       <div className="relative min-h-screen w-full ">
+        <WarningMarquee></WarningMarquee>
         <div className="opacity-0 search-box absolute z-50 w-[92vw] sm:w-[70vw] md:w-[55vw] max-w-[720px] left-1/2 bottom-1/4 -translate-x-1/2">
           <div
             className="
