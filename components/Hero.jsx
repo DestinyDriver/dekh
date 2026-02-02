@@ -10,6 +10,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
 import WarningMarquee from "./WarningMarquee";
+import Footer from "./Footer";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -446,9 +447,13 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
         <div className=" h-[100vh] w-full  about-section">hii</div>
       </div>
       {/* section 4 */}
-      <div className="h-screen w-full  bg-[var(--helper-color1)] relative flex justify-center items-center footer">
-        <div className="h-screen w-full about-section"></div>
+      <div className="h-screen w-full   relative flex justify-center bg-green-500 items-center footer">
+        bye
       </div>
+
+      {/* <div className="h-screen w-full  bg-[var(--helper-color1)] relative flex justify-center items-center "> */}
+      <Footer></Footer>
+      {/* </div> */}
     </div>
   );
 };
