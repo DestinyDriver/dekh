@@ -10,7 +10,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
 import WarningMarquee from "./WarningMarquee";
-import Footer from "./Footer.jx";
+import Footer from "./Footer.jsx";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
