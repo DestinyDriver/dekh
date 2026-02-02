@@ -28,6 +28,58 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
   const textSelection = useRef(null);
   const logoTween = useRef(null);
 
+  const clipWrapRef = useRef(null);
+  const clipInnerRef = useRef(null);
+
+  const mouseEnabled = useRef(true);
+
+  useGSAP(() => {
+    const wrap = clipWrapRef.current;
+    const inner = clipInnerRef.current;
+    if (!wrap || !inner) return;
+
+    const move = (e) => {
+      if (!mouseEnabled.current) return;
+
+      const rect = wrap.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+
+      const px = (x - 0.5) * 2;
+      const py = (y - 0.5) * 2;
+
+      gsap.to(inner, {
+        rotateY: px * 12,
+        rotateX: -py * 12,
+        x: px * 18,
+        y: py * 18,
+        duration: 0.35,
+        ease: "power3.out",
+        transformPerspective: 800,
+        transformOrigin: "center",
+      });
+    };
+
+    const reset = () => {
+      gsap.to(inner, {
+        rotateX: 0,
+        rotateY: 0,
+        x: 0,
+        y: 0,
+        duration: 0.6,
+        ease: "power3.out",
+      });
+    };
+
+    wrap.addEventListener("mousemove", move);
+    wrap.addEventListener("mouseleave", reset);
+
+    return () => {
+      wrap.removeEventListener("mousemove", move);
+      wrap.removeEventListener("mouseleave", reset);
+    };
+  }, []);
+
   const router = useRouter();
 
   useGSAP(() => {
@@ -60,6 +112,30 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
       },
     });
 
+    timeline.to({}, { duration: 1 });
+
+    timeline.to(
+      {},
+      {
+        duration: 0.01,
+        onStart: () => {
+          mouseEnabled.current = false;
+
+          gsap.to(clipInnerRef.current, {
+            rotateX: 0,
+            rotateY: 0,
+            x: 0,
+            y: 0,
+            duration: 0.5,
+            ease: "power3.out",
+          });
+        },
+        onReverseComplete: () => {
+          mouseEnabled.current = true;
+        },
+      },
+    );
+
     timeline.fromTo(
       ".section2-img-mask",
       {
@@ -71,7 +147,6 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
         height: "100vh",
         ease: "none",
       },
-      "first",
     );
 
     timeline.to(
@@ -79,8 +154,9 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
       {
         height: "100vh",
         width: "100vw",
+        ease: "none",
       },
-      "first",
+      "<",
     );
 
     timeline.to(
@@ -347,8 +423,14 @@ const Hero = ({ searchItem, setSearchItem, data }) => {
 
         <div className="min-h-screen w-full  bg-[var(--background-color)] flex justify-center items-center relative">
           {/* background img */}
-          <div className="h-dvh w-screen  flex justify-center items-center clip drop-shadow-xl drop-shadow-black">
-            <div className="clip-img section2-img-mask  size-64 ">
+          <div
+            ref={clipWrapRef}
+            className="h-dvh w-screen   flex justify-center items-center clip drop-shadow-xl drop-shadow-black "
+          >
+            <div
+              ref={clipInnerRef}
+              className="clip-img section2-img-mask  size-64 "
+            >
               <img
                 src="/img/back.png"
                 alt=""
