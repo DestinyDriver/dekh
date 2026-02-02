@@ -49,7 +49,7 @@ const Navbar = () => {
           duration: 0.4,
           ease: "power3.out",
         },
-        "<"
+        "<",
       );
 
     container.addEventListener("mouseenter", () => hoverTl.play());
