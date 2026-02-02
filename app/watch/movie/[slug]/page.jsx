@@ -87,7 +87,7 @@ const Page = () => {
       </div>
 
       {/* Main */}
-      <div className="w-full flex justify-center items-start pb-10 px-2 sm:px-4">
+      <div className="w-full flex justify-center items-start pb-10 px-2 sm:px-4 mt-4">
         <div className="w-full max-w-[1400px] rounded-2xl overflow-hidden bg-[var(--helper-color2)] shadow-[0_0_60px_rgba(0,0,0,0.4)]">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2.5fr]">
             {/* LEFT SIDE */}

@@ -89,7 +89,7 @@ const TvWatchPage = () => {
           <Navbar />
         </div>
 
-        <div className="w-full flex justify-center items-start py-6">
+        <div className="w-full flex justify-center items-start py-6 ">
           <div className="w-[96%] rounded-2xl bg-[var(--helper-color2)] p-4 md:p-6">
             <div className="animate-pulse grid grid-cols-1 lg:grid-cols-[1fr_2.5fr] gap-4">
               <div className="rounded-xl bg-black/30 h-[300px] lg:h-[520px]" />
@@ -118,7 +118,7 @@ const TvWatchPage = () => {
       </div>
 
       {/* Main */}
-      <div className="w-full flex justify-center items-start pb-10 px-2 sm:px-4">
+      <div className="w-full flex justify-center items-start pb-10 px-2 sm:px-4 mt-4">
         <div className="w-full max-w-[1400px] rounded-2xl overflow-hidden bg-[var(--helper-color2)] shadow-[0_0_60px_rgba(0,0,0,0.4)]">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2.5fr]">
             {/* LEFT SIDE */}
@@ -452,7 +452,9 @@ const TvWatchPage = () => {
         </div>
       </div>
 
-      <div className="bg-[var(--helper-color2)] w-full h-[18vh] sm:h-[28vh] md:h-[35vh] rounded-t-3xl" />
+      <div className="bg-[var(--helper-color2)] w-full h-[18vh] sm:h-[28vh] md:h-[35vh] rounded-t-3xl flex justify-center items-center text-white font-bold overflow-hidden text-[20rem]">
+        <div className="flex jutify-center items-center">Dekh</div>
+      </div>
     </div>
   );
 };
